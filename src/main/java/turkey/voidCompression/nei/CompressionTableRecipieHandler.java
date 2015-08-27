@@ -1,4 +1,4 @@
-package turkey.voidCompression.neiHook;
+package turkey.voidCompression.nei;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import turkey.voidCompression.VCCore;
 import turkey.voidCompression.blocks.VCBlocks;
 import turkey.voidCompression.gui.CompressionTableGui;
+import turkey.voidCompression.item.CompressedItemBlock;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 
@@ -43,9 +44,11 @@ public class CompressionTableRecipieHandler extends TemplateRecipeHandler
 	public void loadCraftingRecipes(ItemStack result)
 	{
 		if(result == null)
-		{
 			return;
-		}
+		
+		if(!(result.getItem() instanceof CompressedItemBlock) && VCBlocks.compressedBlockFromBlock.get(Block.getBlockFromItem(result.getItem())) == null)
+			return;
+		
 		List<PositionedStack> input = new ArrayList<PositionedStack>();
 
 		for(int l = 0; l < 3; ++l)
@@ -77,7 +80,10 @@ public class CompressionTableRecipieHandler extends TemplateRecipeHandler
 
 	@Override
 	public void loadUsageRecipes(ItemStack ingredient)
-	{
+	{		
+		if(!(ingredient.getItem() instanceof CompressedItemBlock) && VCBlocks.compressedBlockFromBlock.get(Block.getBlockFromItem(ingredient.getItem())) == null)
+			return;
+		
 		List<PositionedStack> input;
 
 		if(ingredient.getItemDamage() + 1 < 8)

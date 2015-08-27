@@ -1,4 +1,4 @@
-package turkey.voidCompression.neiHook;
+package turkey.voidCompression.nei;
 
 import turkey.voidCompression.VCCore;
 import codechicken.nei.api.API;
