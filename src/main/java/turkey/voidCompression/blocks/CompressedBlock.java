@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class CompressedBlock extends Block
 {
 	@SideOnly(Side.CLIENT)
-	private IIcon[] compressionLevels = new IIcon[8];
+	private IIcon[] compressionLevels;
 
 	private final Block block;
 
@@ -35,6 +35,7 @@ public class CompressedBlock extends Block
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register)
 	{
+		compressionLevels = new IIcon[8];
 		compressionLevels[0] = register.registerIcon(VCCore.MODID + ":compressionOne");
 		compressionLevels[1] = register.registerIcon(VCCore.MODID + ":compressionTwo");
 		compressionLevels[2] = register.registerIcon(VCCore.MODID + ":compressionThree");
