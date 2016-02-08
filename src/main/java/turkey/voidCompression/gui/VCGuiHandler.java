@@ -18,7 +18,6 @@ public class VCGuiHandler implements IGuiHandler
 
 		if (tileEntity != null)
 		{
-			System.out.println("here");
 			switch (ID)
 			{
 			case COMPRESSION_TABLE_ID:

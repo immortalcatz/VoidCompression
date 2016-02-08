@@ -46,7 +46,7 @@ public class CompressionTableRecipieHandler extends TemplateRecipeHandler
 		if(result == null)
 			return;
 		
-		if(!(result.getItem() instanceof CompressedItemBlock) && VCBlocks.compressedBlockFromBlock.get(Block.getBlockFromItem(result.getItem())) == null)
+		if(!(result.getItem() instanceof CompressedItemBlock))
 			return;
 		
 		List<PositionedStack> input = new ArrayList<PositionedStack>();

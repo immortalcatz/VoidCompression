@@ -41,7 +41,8 @@ public class VCCore
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-
+		VCBlocks.loadBlocks();
+		proxy.registerRenderings();
 	}
 
 	@EventHandler
@@ -51,17 +52,13 @@ public class VCCore
 		
 		ConfigLoader.loadConfigSettings(event.getSuggestedConfigurationFile());
 
-		proxy.registerRenderings();
-
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new VCGuiHandler());
 		FMLCommonHandler.instance().bus().register(new UpdateNotificationHandler());
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
-	{
-		VCBlocks.loadBlocks();
-		
+	{	
 		CraftingRecipies.loadRecipies();
 	}
 }

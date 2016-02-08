@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import turkey.voidCompression.blocks.CompressedBlock;
 import turkey.voidCompression.blocks.VCBlocks;
 import turkey.voidCompression.item.CompressedItemBlock;
 
@@ -38,14 +38,21 @@ public class CompressionHelper
 
 			if(stack0.getItem() instanceof CompressedItemBlock)
 			{
-				ItemStack stack = new ItemStack(VCBlocks.compressedBlockFromBlock.get(((CompressedBlock) ((CompressedItemBlock) stack0.getItem()).field_150939_a).getBlock()), 1);
-				stack.setItemDamage(stack0.getItemDamage() + 1);
+				ItemStack stack = new ItemStack(VCBlocks.compressedBlock, 1);
+				stack.stackTagCompound = (NBTTagCompound) stack0.stackTagCompound.copy();
+				int compression = stack.stackTagCompound.getInteger("Compression") + 1;
+				stack.stackTagCompound.setInteger("Compression", compression);
+				String oldDisplay = stack.stackTagCompound.getString("Display");
+				stack.stackTagCompound.setString("Display", CompressionHelper.tuples[compression-1] + oldDisplay.substring(oldDisplay.indexOf(" ")));
 				return stack;
 			}
 			else if(stack0.getItem() instanceof ItemBlock)
 			{
-				ItemStack stack = new ItemStack(VCBlocks.compressedBlockFromBlock.get(Block.getBlockFromItem(stack0.getItem())), 1);
-				stack.setItemDamage(stack0.getItemDamage());
+				ItemStack stack = new ItemStack(VCBlocks.compressedBlock, 1);
+				stack.stackTagCompound = new NBTTagCompound();
+				stack.stackTagCompound.setString("BlockID", Block.blockRegistry.getNameForObject(Block.getBlockFromItem(stack0.getItem())));
+				stack.stackTagCompound.setInteger("Compression", 1);
+				stack.stackTagCompound.setString("Display", CompressionHelper.tuples[0] + " Compressed " + stack0.getItem().getItemStackDisplayName(stack0));
 				return stack;
 			}
 		}
@@ -56,11 +63,8 @@ public class CompressionHelper
 	public String getCompressedBlockName(ItemStack stack)
 	{
 		int i = stack.getItemDamage();
-		Block compressed = ((CompressedBlock) ((ItemBlock) stack.getItem()).field_150939_a).getBlock();
-		
-		ItemStack compressedStack = new ItemStack(compressed);
 
-		List<String> stackname = compressedStack.getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
+		List<String> stackname = stack.getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
 
 		if(stackname == null)
 			stackname = new ArrayList<String>();
@@ -70,7 +74,7 @@ public class CompressionHelper
 
 		if(stackname.get(0) == null || stackname.get(0).equals(""))
 			stackname.set(0, stack.getUnlocalizedName());
-		
+
 		return CompressionHelper.tuples[i] + " Compressed " + stackname.get(0);
 	}
 
@@ -79,7 +83,7 @@ public class CompressionHelper
 	{
 		int i = stack.getItemDamage();
 		Block compressed = ((ItemBlock) stack.getItem()).field_150939_a;
-		
+
 		ItemStack compressedStack = new ItemStack(compressed);
 
 		List<String> stackname = compressedStack.getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
@@ -92,7 +96,7 @@ public class CompressionHelper
 
 		if(stackname.get(0) == null || stackname.get(0).equals(""))
 			stackname.set(0, stack.getUnlocalizedName());
-		
+
 		return CompressionHelper.tuples[i] + " Compressed " + stackname.get(0);
 	}
 }
